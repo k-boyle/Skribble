@@ -3,48 +3,31 @@ using static NUnit.Framework.Assert;
 
 namespace Kode.Tests {
     public class InterpreterTests {
-        [Test]
-        public void TestTokensInAdditionSum() {
-            var interpreter = new Interpreter("3 + 5");
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<AdditionToken>(interpreter.GetNextToken());
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<EOFToken>(interpreter.GetNextToken());
+        [TestCase("3+4", 7)]
+        [TestCase("10-7", 3)]
+        [TestCase("    1    +     4    ", 5)]
+        [TestCase("2 * 4", 8)]
+        [TestCase("8 / 2", 4)]
+        [TestCase("10 + 5 - 3 * 2", 24)]
+        public void TestCalculations(string input, int expectedResult) {
+            AreEqual(expectedResult, Interpreter.Evaluate(input));
         }
         
         [Test]
-        public void TestTokensInSubtractionSum() {
-            var interpreter = new Interpreter("3 - 5");
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<MinusToken>(interpreter.GetNextToken());
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<EOFToken>(interpreter.GetNextToken());
-        }
-        
-        [Test]
-        public void TestTokensInMultiplicationSum() {
-            var interpreter = new Interpreter("3 * 5");
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<MultiplicationToken>(interpreter.GetNextToken());
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<EOFToken>(interpreter.GetNextToken());
-        }
-        
-        [Test]
-        public void TestTokensInDivisionSum() {
-            var interpreter = new Interpreter("3 / 5");
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<DivisionToken>(interpreter.GetNextToken());
-            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
-            IsInstanceOf<EOFToken>(interpreter.GetNextToken());
-        }
-        
-        [Test]
-        public void TestThrowsOnUnknownToken() {
-            var interpreter = new Interpreter("#");
-            //interpreter is ref struct so can't use Throws
+        public void TestIncompleteSumThrows() {
             try {
-                interpreter.GetNextToken();
+                Interpreter.Evaluate("3 +");
+            } catch (UnexpectedTokenException) {
+                Pass();
+            }
+            
+            Fail();
+        }
+        
+        [Test]
+        public void TestInterpreterThrowsOnInvalidToken() {
+            try {
+                Interpreter.Evaluate("#");
             } catch (InvalidTokenException) {
                 Pass();
             }
