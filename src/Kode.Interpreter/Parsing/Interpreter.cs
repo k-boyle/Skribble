@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Kode {
     internal ref struct Interpreter {
@@ -79,12 +78,15 @@ namespace Kode {
         }
         
         public int Evaluate() {
-            IntegerToken left = GetNextToken<IntegerToken>();
-            OperatorToken op = GetNextToken<OperatorToken>();
-            IntegerToken right = GetNextToken<IntegerToken>();
+            int result = GetNextToken<IntegerToken>();
+
+            while (GetNextToken() is OperatorToken op) {
+                result = op.Calculate(result, GetNextToken<IntegerToken>());
+            }
+            
             GetNextToken<EOFToken>();
 
-            return op.Calculate(left, right);
+            return result;
         }
     }
 }

@@ -33,5 +33,11 @@ namespace Kode.Tests {
             int result = Kode.Execute("8 / 2");
             AreEqual(4, result);
         }
+        
+        [Test]
+        public void TestMixedOperatorSum() {
+            int result = Kode.Execute("10 + 5 - 3 * 2");
+            AreEqual(24, result);
+        }
     }
 }
