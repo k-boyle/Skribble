@@ -1,5 +1,5 @@
 namespace Kode {
-    public abstract class OperatorToken : Token {
-        public abstract int Calculate(int left, int right);
+    public interface IOperatorToken : IToken {
+        int Calculate(int left, int right);
     }
 }

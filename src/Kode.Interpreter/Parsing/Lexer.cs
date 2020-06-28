@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 
 namespace Kode {
-    internal ref struct Lexer {
-        private static readonly Dictionary<char, OperatorToken> Operators = new Dictionary<char, OperatorToken> {
+    internal class Lexer {
+        private static readonly Dictionary<char, IToken> TokenMap = new Dictionary<char, IToken> {
             ['+'] = AdditionToken.Instance,
             ['-'] = MinusToken.Instance,
             ['*'] = MultiplicationToken.Instance,
-            ['/'] = DivisionToken.Instance
+            ['/'] = DivisionToken.Instance,
+            ['('] = OpenParenthesesToken.Instance,
+            [')'] = CloseParenthesesToken.Instance,
+            ['%'] = ModulusToken.Instance
         };
 
-        
-        private readonly ReadOnlySpan<char> _text;
+        private readonly ReadOnlyMemory<char> _text;
         private int _position;
 
         private char? _currentChar;
 
         public Lexer(string text) {
-            this._text = text.AsSpan();
+            this._text = text.AsMemory();
             this._position = 0;
-            this._currentChar = text.Length > 0 ? (char?) this._text[0] : null;
+            this._currentChar = text.Length > 0 ? (char?) this._text.Span[0] : null;
         }
         
         private int GetDigitLength() {
@@ -40,14 +42,14 @@ namespace Kode {
 
         private void Increment() {
             if (this._position < this._text.Length - 1) {
-                this._currentChar = this._text[++this._position];
+                this._currentChar = this._text.Span[++this._position];
             } else {
                 this._position++;
                 this._currentChar = null;
             }
         }
         
-        public Token GetNextToken() {
+        public IToken GetNextToken() {
             SkipSpaces();
             
             if (this._currentChar.HasValue) {
@@ -55,10 +57,10 @@ namespace Kode {
                 
                 if (char.IsDigit(current)) {
                     var digitLength = GetDigitLength();
-                    return new IntegerToken(int.Parse(this._text.Slice(this._position - digitLength, digitLength)));
+                    return new IntegerToken(int.Parse(this._text.Slice(this._position - digitLength, digitLength).Span));
                 }
             
-                if (Operators.TryGetValue(current, out var token)) {
+                if (TokenMap.TryGetValue(current, out var token)) {
                     Increment();
                     return token;
                 }
@@ -69,8 +71,8 @@ namespace Kode {
             return EOFToken.Instance;
         }
         
-        public T GetNextToken<T>() where T : Token {
-            Token nextToken = GetNextToken();
+        public T GetNextToken<T>() where T : IToken {
+            IToken nextToken = GetNextToken();
             if (nextToken is T token) {
                 return token;
             }

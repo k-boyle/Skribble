@@ -1,9 +1,6 @@
 namespace Kode {
-    public sealed class EOFToken : Token {
+    public readonly struct EOFToken : IToken {
         public static readonly EOFToken Instance = new EOFToken();
-
-        private EOFToken() {
-        }
 
         public override string ToString() {
             return "EOF";

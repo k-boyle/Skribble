@@ -1,17 +1,17 @@
 namespace Kode {
-    public sealed class IntegerToken : Token {
-        public int Value { get; }
+    public readonly struct IntegerToken : IToken {
+        private readonly int _value;
 
         public IntegerToken(int value) {
-            Value = value;
+            this._value = value;
         }
 
         public static implicit operator int(IntegerToken token) {
-            return token.Value;
+            return token._value;
         }
 
         public override string ToString() {
-            return $"INTEGER: {Value}";
+            return $"INTEGER: {this._value}";
         }
     }
 }

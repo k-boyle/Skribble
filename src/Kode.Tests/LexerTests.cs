@@ -10,6 +10,8 @@ namespace Kode.Tests {
         [TestCase("*", typeof(MultiplicationToken))]
         [TestCase("/", typeof(DivisionToken))]
         [TestCase("", typeof(EOFToken))]
+        [TestCase("(", typeof(OpenParenthesesToken))]
+        [TestCase(")", typeof(CloseParenthesesToken))]
         public void TestTokens(string input, Type expectedTokenType) {
             var lexer = new Lexer(input);
             IsInstanceOf(expectedTokenType, lexer.GetNextToken());
@@ -41,7 +43,7 @@ namespace Kode.Tests {
             IsInstanceOf<IntegerToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
-        
+
         [Test]
         public void TestTokensInDivisionSum() {
             var lexer = new Lexer("3 / 5");
@@ -50,7 +52,20 @@ namespace Kode.Tests {
             IsInstanceOf<IntegerToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
-        
+
+        [Test]
+        public void TestTokensInBracketedSum() {
+            var lexer = new Lexer("3 + (4 + 4)");
+            IsInstanceOf<IntegerToken>(lexer.GetNextToken());
+            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
+            IsInstanceOf<IntegerToken>(lexer.GetNextToken());
+            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<IntegerToken>(lexer.GetNextToken());
+            IsInstanceOf<CloseParenthesesToken>(lexer.GetNextToken());
+            IsInstanceOf<EOFToken>(lexer.GetNextToken());
+        }
+
         [Test]
         public void TestThrowsOnUnknownToken() {
             var lexer = new Lexer("#");
