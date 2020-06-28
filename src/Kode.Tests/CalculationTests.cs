@@ -17,7 +17,7 @@ namespace Kode.Tests {
         }
 
         [Test]
-        public void TestSpacesIgnored() {
+        public void TestWhiteSpacesIgnored() {
             int result = Kode.Execute("    1    +     4    ");
             AreEqual(5, result);
         }

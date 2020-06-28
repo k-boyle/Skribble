@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Kode {
     internal ref struct Interpreter {
@@ -13,57 +14,77 @@ namespace Kode {
         private readonly ReadOnlySpan<char> _text;
         private int _position;
 
+        private char? _currentChar;
+
         public Interpreter(string text) {
             this._text = text.AsSpan();
             this._position = 0;
+            this._currentChar = this._text[0];
         }
 
-        private bool IsDigit() {
-            char current = this._text[this._position];
-            return current >= '0' && current <= '9';
-        }
+        private int GetDigitLength() {
+            int digitLength = 0;
+            do {
+                Increment();
+                digitLength++;
+            } while (this._currentChar.HasValue && char.IsDigit(this._currentChar.Value));
 
-        private bool IsSpace() {
-            return this._text[this._position] == ' ';
+            return digitLength;
         }
 
         private void SkipSpaces() {
-            while (IsSpace()) {
-                this._position++;
+            while (this._currentChar.HasValue && char.IsWhiteSpace(this._currentChar.Value)) {
+                Increment();
             }
         }
 
-        private bool HasNext() {
-            return this._position < this._text.Length;
+        private void Increment() {
+            if (this._position < this._text.Length - 1) {
+                this._currentChar = this._text[++this._position];
+            } else {
+                this._position++;
+                this._currentChar = null;
+            }
         }
-
+        
         public Token GetNextToken() {
-            if (this._position == this._text.Length) {
-                return EOFToken.Instance;
-            }
-            
             SkipSpaces();
-
-            if (IsDigit()) {
-                int digitLength = 0;
-                do {
-                    this._position++;
-                    digitLength++;
-                } while (HasNext() && IsDigit());
-
-                return new IntegerToken(int.Parse(this._text.Slice(this._position - digitLength, digitLength)));
-            }
             
-            if (Operators.TryGetValue(this._text[this._position], out var token)) {
-                this._position++;
+            if (this._currentChar.HasValue) {
+                char current = this._currentChar.Value;
+                
+                if (char.IsDigit(current)) {
+                    var digitLength = GetDigitLength();
+                    return new IntegerToken(int.Parse(this._text.Slice(this._position - digitLength, digitLength)));
+                }
+            
+                if (Operators.TryGetValue(current, out var token)) {
+                    Increment();
+                    return token;
+                }
+
+                throw new InvalidTokenException(current);
+            }
+
+            return EOFToken.Instance;
+        }
+
+        private T GetNextToken<T>() where T : Token {
+            Token nextToken = GetNextToken();
+            if (nextToken is T token) {
                 return token;
             }
-
-            throw new InvalidTokenException(this._text[this._position]);
+            
+            throw new UnexpectedTokenException(typeof(T), nextToken);
         }
         
         public int Evaluate() {
-            return 0;
+            IntegerToken left = GetNextToken<IntegerToken>();
+            OperatorToken op = GetNextToken<OperatorToken>();
+            IntegerToken right = GetNextToken<IntegerToken>();
+            GetNextToken<EOFToken>();
+
+            return op.Calculate(left, right);
         }
     }
 }
