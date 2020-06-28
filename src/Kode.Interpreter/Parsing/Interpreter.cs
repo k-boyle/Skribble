@@ -5,7 +5,9 @@ namespace Kode {
     internal ref struct Interpreter {
         private static readonly Dictionary<char, OperatorToken> Operators = new Dictionary<char, OperatorToken> {
             ['+'] = AdditionToken.Instance,
-            ['-'] = MinusToken.Instance
+            ['-'] = MinusToken.Instance,
+            ['*'] = MultiplicationToken.Instance,
+            ['/'] = DivisionToken.Instance
         };
 
         private readonly ReadOnlySpan<char> _text;
@@ -58,6 +60,10 @@ namespace Kode {
             }
 
             throw new InvalidTokenException(this._text[this._position]);
+        }
+        
+        public int Evaluate() {
+            return 0;
         }
     }
 }

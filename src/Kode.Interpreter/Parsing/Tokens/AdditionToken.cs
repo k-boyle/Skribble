@@ -1,6 +1,6 @@
 namespace Kode {
     public sealed class AdditionToken : OperatorToken {
-        public static AdditionToken Instance = new AdditionToken();
+        public static readonly AdditionToken Instance = new AdditionToken();
 
         private AdditionToken() {
         }

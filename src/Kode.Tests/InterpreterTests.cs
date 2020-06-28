@@ -22,6 +22,24 @@ namespace Kode.Tests {
         }
         
         [Test]
+        public void TestTokensInMultiplicationSum() {
+            var interpreter = new Interpreter("3 * 5");
+            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
+            IsInstanceOf<MultiplicationToken>(interpreter.GetNextToken());
+            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
+            IsInstanceOf<EOFToken>(interpreter.GetNextToken());
+        }
+        
+        [Test]
+        public void TestTokensInDivisionSum() {
+            var interpreter = new Interpreter("3 / 5");
+            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
+            IsInstanceOf<DivisionToken>(interpreter.GetNextToken());
+            IsInstanceOf<IntegerToken>(interpreter.GetNextToken());
+            IsInstanceOf<EOFToken>(interpreter.GetNextToken());
+        }
+        
+        [Test]
         public void TestThrowsOnUnknownToken() {
             var interpreter = new Interpreter("#");
             //interpreter is ref struct so can't use Throws
