@@ -1,5 +1,5 @@
 namespace Kode {
     public interface IOperatorToken : IToken {
-        int Calculate(int left, int right);
+        dynamic Calculate(dynamic left, dynamic right);
     }
 }

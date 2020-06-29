@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System;
 using static NUnit.Framework.Assert;
 
 namespace Kode.Tests {
@@ -13,30 +14,33 @@ namespace Kode.Tests {
         [TestCase("10 + (3 + 4)", 17)]
         [TestCase("10 + (3 + (4 * 2))", 21)]
         [TestCase("10 % 3", 1)]
-        public void TestCalculations(string input, int expectedResult) {
+        [TestCase("9223372036854775807 + 1", -9223372036854775808)]
+        [TestCase("1.2 + 2.3", 3.5)]
+        [TestCase("1.2 + 3", 4.2)]
+        [TestCase("2.5 / 2", 1.25)]
+        [TestCase("(2.3 + 1) * 2", 6.6)]
+        [TestCase("2 + ((3 * 4))", 14)]
+        [TestCase("2 + ((3 * 4) * 2)", 26)]
+        public void TestCalculations(string input, object expectedResult) {
             AreEqual(expectedResult, Interpreter.Evaluate(input));
         }
         
         [Test]
         public void TestIncompleteSumThrows() {
-            try {
-                Interpreter.Evaluate("3 +");
-            } catch (UnexpectedTokenException) {
-                Pass();
-            }
-            
-            Fail();
+            Throws<UnexpectedTokenException>(() => Interpreter.Evaluate("3 +"));
         }
         
         [Test]
         public void TestInterpreterThrowsOnInvalidToken() {
-            try {
-                Interpreter.Evaluate("#");
-            } catch (InvalidTokenException) {
-                Pass();
-            }
-            
-            Fail();
+            Throws<InvalidTokenException>(() => Interpreter.Evaluate("#"));
+        }
+        
+        [TestCase("1 + ((2 + 2)", typeof(ExpectedTokenException))]
+        [TestCase("1 + (2 + 2", typeof(ExpectedTokenException))]
+        [TestCase("1 + 2 + 2)", typeof(UnexpectedTokenException))]
+        [TestCase("1 + 2 + 2))", typeof(UnexpectedTokenException))]
+        public void TestThrowsOnInvalidBracket(string input, Type expectedExceptionType) {
+            Throws(expectedExceptionType, () => Interpreter.Evaluate(input));
         }
     }
 }

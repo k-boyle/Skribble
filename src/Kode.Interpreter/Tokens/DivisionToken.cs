@@ -2,8 +2,8 @@
     public readonly struct DivisionToken : IOperatorToken {
         public static readonly DivisionToken Instance = new DivisionToken();
         
-        public int Calculate(int left, int right) {
-            return left / right;
+        public dynamic Calculate(dynamic left, dynamic right) {
+            return unchecked(left / right);
         }
 
         public override string ToString() {

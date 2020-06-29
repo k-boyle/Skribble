@@ -2,8 +2,8 @@
     public readonly struct MultiplicationToken : IOperatorToken {
         public static readonly MultiplicationToken Instance = new MultiplicationToken();
 
-        public int Calculate(int left, int right) {
-            return left * right;
+        public dynamic Calculate(dynamic left, dynamic right) {
+            return unchecked(left * right);
         }
 
         public override string ToString() {

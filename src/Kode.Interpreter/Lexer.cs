@@ -13,6 +13,8 @@ namespace Kode {
             ['%'] = ModulusToken.Instance
         };
 
+        public int Position => this._position;
+
         private readonly ReadOnlyMemory<char> _text;
         private int _position;
 
@@ -24,14 +26,21 @@ namespace Kode {
             this._currentChar = text.Length > 0 ? (char?) this._text.Span[0] : null;
         }
         
-        private int GetDigitLength() {
+        private (int Length, bool FloatingPoint) GetNumberInformation() {
             int digitLength = 0;
+            bool floatingPoint = false;
             do {
                 Increment();
                 digitLength++;
+                
+                if (this._currentChar == '.') {
+                    floatingPoint = !floatingPoint ? true : throw new Exception();
+                    digitLength++;
+                    Increment();
+                }
             } while (this._currentChar.HasValue && char.IsDigit(this._currentChar.Value));
 
-            return digitLength;
+            return (digitLength, floatingPoint);
         }
 
         private void SkipSpaces() {
@@ -56,8 +65,10 @@ namespace Kode {
                 char current = this._currentChar.Value;
                 
                 if (char.IsDigit(current)) {
-                    var digitLength = GetDigitLength();
-                    return new IntegerToken(int.Parse(this._text.Slice(this._position - digitLength, digitLength).Span));
+                    var (length, floating) = GetNumberInformation();
+                    return floating
+                        ? new DoubleToken(double.Parse(this._text.Slice(this._position - length, length).Span))
+                        : new LongToken(long.Parse(this._text.Slice(this._position - length, length).Span)) as INumberToken;
                 }
             
                 if (TokenMap.TryGetValue(current, out var token)) {
@@ -65,7 +76,7 @@ namespace Kode {
                     return token;
                 }
 
-                throw new InvalidTokenException(current);
+                throw new InvalidTokenException(current, this._position);
             }
 
             return EOFToken.Instance;
