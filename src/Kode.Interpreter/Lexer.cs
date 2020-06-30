@@ -34,7 +34,9 @@ namespace Kode {
                 digitLength++;
                 
                 if (this._currentChar == '.') {
-                    floatingPoint = !floatingPoint ? true : throw new InvalidTokenException(this._currentChar.Value, this._position);
+                    floatingPoint = !floatingPoint 
+                        ? true
+                        : throw new InvalidTokenException(this._currentChar.Value, this._position);
                     digitLength++;
                     Increment();
                 }
@@ -50,12 +52,9 @@ namespace Kode {
         }
 
         private void Increment() {
-            if (this._position < this._text.Length - 1) {
-                this._currentChar = this._text.Span[++this._position];
-            } else {
-                this._position++;
-                this._currentChar = null;
-            }
+            this._currentChar = this._position++ < this._text.Length - 1
+                ? this._text.Span[this._position]
+                : (char?) null;
         }
         
         public IToken GetNextToken() {
