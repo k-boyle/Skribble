@@ -1,41 +1,64 @@
+using System;
+using System.Collections.Generic;
+
 namespace Kode {
-    public static class Interpreter {
+    public sealed class Interpreter {
+        private static readonly Dictionary<int, HashSet<Type>> OperatorPrecendence = new Dictionary<int, HashSet<Type>> {
+            [2] = new HashSet<Type> { typeof(AdditionToken), typeof(MinusToken) },
+            [1] = new HashSet<Type> { typeof(MultiplicationToken), typeof(DivisionToken), typeof(ModulusToken) }
+        };
+
+        private readonly Lexer _lexer;
+
+        private IToken _currentToken;
+
+        private Interpreter(string input) {
+            this._lexer = new Lexer(input);
+            this._currentToken = this._lexer.GetNextToken();
+        }
+        
         public static object Evaluate(string input) {
-            var lexer = new Lexer(input);
-            dynamic result = RecursiveCalculation(false);
+            var interpreter = new Interpreter(input);
+            var result = interpreter.Calculate();
+            return interpreter._currentToken is EOFToken
+                ? result
+                : throw new UnexpectedTokenException(interpreter._currentToken, interpreter._lexer.Position);
+        }
 
-            dynamic RecursiveCalculation(bool brackets) {
-                IToken start = lexer.GetNextToken();
-                dynamic total = start switch {
-                    OpenParenthesesToken _ => RecursiveCalculation(true),
-                    INumberToken number    => number.Value,
-                    _                      => throw new UnexpectedTokenException(start, lexer.Position)
-                };
-
-                IToken currentToken;
-                while ((currentToken = lexer.GetNextToken()) is IOperatorToken op) {
-                    IToken nextToken = lexer.GetNextToken();
-                    total = nextToken switch {
-                        INumberToken number    => op.Calculate(total, number.Value),
-                        OpenParenthesesToken _ => op.Calculate(total, RecursiveCalculation(true)),
-                        _                      => throw new UnexpectedTokenException(op, nextToken)
-                    };
-                }
-
-                if (!brackets && currentToken is CloseParenthesesToken) {
-                    throw new UnexpectedTokenException(currentToken, lexer.Position);
-                }
-                
-                if (brackets && !(currentToken is CloseParenthesesToken)) {
-                    throw new ExpectedTokenException(')', lexer.Position);
-                }
-                
-                return total;
+        private dynamic Calculate() {
+            return Calculate(OperatorPrecendence[2], () => Calculate(OperatorPrecendence[1], () => GetFactor()));
+        }
+        
+        private dynamic Calculate(HashSet<Type> operators, Func<dynamic> next) {
+            dynamic result = next();
+            
+            while (this._currentToken is IOperatorToken op && operators.Contains(op.GetType())) {
+                this._currentToken = this._lexer.GetNextToken();
+                result = op.Calculate(result, next());
             }
             
-            lexer.GetNextToken<EOFToken>();
-
             return result;
+        }
+
+        private dynamic GetFactor() {
+            switch (this._currentToken) {
+                case INumberToken number:
+                    this._currentToken = this._lexer.GetNextToken();
+                    return number.Value;
+                
+                case OpenParenthesesToken _:
+                    this._currentToken = this._lexer.GetNextToken();
+                    dynamic result = Calculate();
+                    if (this._currentToken is CloseParenthesesToken) {
+                        this._currentToken = this._lexer.GetNextToken();
+                        return result;
+                    }
+            
+                    throw new UnexpectedTokenException(typeof(CloseParenthesesToken), this._currentToken);
+                
+                default:
+                    throw new UnexpectedTokenException(this._currentToken, this._lexer.Position);
+            }
         }
     }
 }

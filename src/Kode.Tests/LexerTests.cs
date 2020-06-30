@@ -104,7 +104,8 @@ namespace Kode.Tests {
         
         [TestCase("#")]
         [TestCase("1..2")]
-        public void TestThrowsOnUnknownToken(string input) {
+        [TestCase("1.2.3")]
+        public void TestThrowsOnInvalidToken(string input) {
             var lexer = new Lexer(input);
             Throws<InvalidTokenException>(() => {
                 while (!(lexer.GetNextToken() is EOFToken)) ;

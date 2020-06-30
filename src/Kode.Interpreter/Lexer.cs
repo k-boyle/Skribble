@@ -34,7 +34,7 @@ namespace Kode {
                 digitLength++;
                 
                 if (this._currentChar == '.') {
-                    floatingPoint = !floatingPoint ? true : throw new Exception();
+                    floatingPoint = !floatingPoint ? true : throw new InvalidTokenException(this._currentChar.Value, this._position);
                     digitLength++;
                     Increment();
                 }
@@ -80,15 +80,6 @@ namespace Kode {
             }
 
             return EOFToken.Instance;
-        }
-        
-        public T GetNextToken<T>() where T : IToken {
-            IToken nextToken = GetNextToken();
-            if (nextToken is T token) {
-                return token;
-            }
-            
-            throw new UnexpectedTokenException(typeof(T), nextToken);
         }
     }
 }
