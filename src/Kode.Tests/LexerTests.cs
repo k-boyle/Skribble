@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Globalization;
 using System.Numerics;
 using static NUnit.Framework.Assert;
 
@@ -114,7 +113,7 @@ namespace Kode.Tests {
             });
         }
         
-        private static object[] InvalidNumbers() {
+        private static object[] OutOfRangeNumbers() {
             return new object[] {
                 (new BigInteger(long.MaxValue) + 1).ToString(),
                 (new BigInteger(long.MinValue) - 1).ToString(),
@@ -123,7 +122,7 @@ namespace Kode.Tests {
             };
         }
         
-        [TestCaseSource(nameof(InvalidNumbers))]
+        [TestCaseSource(nameof(OutOfRangeNumbers))]
         public void TestThrowsOnOutOfRangeNumbers(string input) {
             var lexer = new Lexer(input);
             Throws<NumberParseFailedException>(() => {
