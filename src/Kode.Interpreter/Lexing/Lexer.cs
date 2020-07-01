@@ -66,6 +66,7 @@ namespace Kode {
                 if (char.IsDigit(current)) {
                     var (length, floating) = GetNumberInformation();
                     return floating
+                    //todo try parse
                         ? new DoubleToken(double.Parse(this._text.Slice(this._position - length, length).Span))
                         : new LongToken(long.Parse(this._text.Slice(this._position - length, length).Span)) as INumberToken;
                 }

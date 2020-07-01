@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
 using static NUnit.Framework.Assert;
 
 namespace Kode.Tests {
@@ -27,23 +26,12 @@ namespace Kode.Tests {
         public void TestCalculations2(string input, object expectedResult) {
             AreEqual(expectedResult, Interpreter.Evaluate(input));
         }
-
-        [Test]
-        public void TestIncompleteSumThrows() {
-            Throws<UnexpectedTokenException>(() => Interpreter.Evaluate("3 +"));
-        }
         
-        [Test]
-        public void TestInterpreterThrowsOnInvalidToken() {
-            Throws<InvalidTokenException>(() => Interpreter.Evaluate("#"));
-        }
         
-        [TestCase("1 + ((2 + 2)", typeof(UnexpectedTokenException))]
-        [TestCase("1 + (2 + 2", typeof(UnexpectedTokenException))]
-        [TestCase("1 + 2 + 2)", typeof(UnexpectedTokenException))]
-        [TestCase("1 + 2 + 2))", typeof(UnexpectedTokenException))]
-        public void TestThrowsOnInvalidBracket(string input, Type expectedExceptionType) {
-            Throws(expectedExceptionType, () => Interpreter.Evaluate(input));
+        [TestCase("1 + 2 + 2)")]
+        [TestCase("1 + 2 + 2))")]
+        public void TestThrowsOnInvalidBracket(string input) {
+            Throws<UnexpectedTokenException>(() => Interpreter.Evaluate(input));
         }
     }
 }

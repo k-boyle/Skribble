@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Kode {
     public sealed class InvalidTokenException : Exception {
