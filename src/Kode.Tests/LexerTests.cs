@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Globalization;
+using System.Numerics;
 using static NUnit.Framework.Assert;
 
 namespace Kode.Tests {
@@ -108,6 +110,23 @@ namespace Kode.Tests {
         public void TestThrowsOnInvalidToken(string input) {
             var lexer = new Lexer(input);
             Throws<InvalidTokenException>(() => {
+                while (!(lexer.GetNextToken() is EOFToken)) ;
+            });
+        }
+        
+        private static object[] InvalidNumbers() {
+            return new object[] {
+                (new BigInteger(long.MaxValue) + 1).ToString(),
+                (new BigInteger(long.MinValue) - 1).ToString(),
+                (new BigInteger(double.MaxValue) + 1).ToString(),
+                double.MinValue.ToString($".{new string('#', 324)}") + "1"
+            };
+        }
+        
+        [TestCaseSource(nameof(InvalidNumbers))]
+        public void TestThrowsOnOutOfRangeNumbers(string input) {
+            var lexer = new Lexer(input);
+            Throws<NumberParseFailedException>(() => {
                 while (!(lexer.GetNextToken() is EOFToken)) ;
             });
         }

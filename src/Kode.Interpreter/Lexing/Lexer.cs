@@ -66,9 +66,8 @@ namespace Kode {
                 if (char.IsDigit(current)) {
                     var (length, floating) = GetNumberInformation();
                     return floating
-                    //todo try parse
-                        ? new DoubleToken(double.Parse(this._text.Slice(this._position - length, length).Span))
-                        : new LongToken(long.Parse(this._text.Slice(this._position - length, length).Span)) as INumberToken;
+                        ? new DoubleToken(ParseDouble(length))
+                        : new LongToken(ParseLong(length)) as INumberToken;
                 }
             
                 if (TokenMap.TryGetValue(current, out var token)) {
@@ -80,6 +79,22 @@ namespace Kode {
             }
 
             return EOFToken.Instance;
+        }
+        
+        private double ParseDouble(int length) {
+            if (double.TryParse(this._text.Slice(this._position - length, length).Span, out var d)) {
+                return d;
+            }
+            
+            throw new NumberParseFailedException(this._text.Slice(this._position - length, length).ToString(), typeof(double));
+        }
+        
+        private long ParseLong(int length) {
+            if (long.TryParse(this._text.Slice(this._position - length, length).Span, out var l)) {
+                return l;
+            }
+            
+            throw new NumberParseFailedException(this._text.Slice(this._position - length, length).ToString(), typeof(long));
         }
     }
 }
