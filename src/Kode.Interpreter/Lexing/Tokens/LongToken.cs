@@ -1,5 +1,5 @@
 ﻿namespace Kode {
-    public readonly struct LongToken : INumberToken {
+    internal readonly struct LongToken : INumberToken {
         public dynamic Value { get; }
 
         public LongToken(long value) {

@@ -1,5 +1,5 @@
 namespace Kode {
-    public readonly struct MinusToken : IOperatorToken {
+    internal readonly struct MinusToken : IOperatorToken {
         public static readonly MinusToken Instance = new MinusToken();
         
         public dynamic Calculate(dynamic left, dynamic right) {

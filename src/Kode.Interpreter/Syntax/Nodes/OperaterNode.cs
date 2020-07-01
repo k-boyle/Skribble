@@ -1,5 +1,5 @@
 ﻿namespace Kode {
-    public readonly struct OperaterNode : ISyntaxTreeNode {
+    internal readonly struct OperaterNode : ISyntaxTreeNode {
         public ISyntaxTreeNode Left { get; }
         public IOperatorToken Operator { get; }
         public ISyntaxTreeNode Right { get; }

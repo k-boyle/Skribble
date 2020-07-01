@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Kode {
-    internal class Lexer {
+    internal sealed class Lexer {
         private static readonly Dictionary<char, IToken> TokenMap = new Dictionary<char, IToken> {
             ['+'] = AdditionToken.Instance,
             ['-'] = MinusToken.Instance,

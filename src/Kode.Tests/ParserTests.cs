@@ -45,7 +45,7 @@ namespace Kode.Tests {
         }
 
         [TestCaseSource(nameof(SyntaxTrees))]
-        public void TestSyntaxTrees(string input, ISyntaxTreeNode expectedTree) {
+        public void TestSyntaxTrees(string input, object expectedTree) {
             var lexer = new Lexer(input);
             var parser = new Parser(lexer);
             var parsed = parser.Parse();

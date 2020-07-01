@@ -1,5 +1,5 @@
 ﻿namespace Kode {
-    public interface INumberToken : IToken {
+    internal interface INumberToken : IToken {
         public dynamic Value { get; }
     }
 }

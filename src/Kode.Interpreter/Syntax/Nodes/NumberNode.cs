@@ -1,5 +1,5 @@
 ﻿namespace Kode {
-    public readonly struct NumberNode : ISyntaxTreeNode {
+    internal readonly struct NumberNode : ISyntaxTreeNode {
         public INumberToken Number { get; }
 
         public NumberNode(INumberToken number) {

@@ -1,4 +1,4 @@
 namespace Kode {
-    public interface IToken {
+    internal interface IToken {
     }
 }

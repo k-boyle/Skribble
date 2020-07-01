@@ -1,5 +1,5 @@
 namespace Kode {
-    public class Interpreter {
+    public readonly struct Interpreter {
         private readonly Parser _parser;
 
         private Interpreter(Parser parser) {

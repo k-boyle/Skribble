@@ -1,4 +1,4 @@
 ﻿namespace Kode {
-    public interface ISyntaxTreeNode {
+    internal interface ISyntaxTreeNode {
     }
 }
