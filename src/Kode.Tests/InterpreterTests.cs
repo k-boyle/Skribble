@@ -23,6 +23,8 @@ namespace Kode.Tests {
         [TestCase("2 + ((3 * 4) * 2)", 26)]
         [TestCase("10 + (3 + 4)", 17)]
         [TestCase("10 + (3 + (4 * 2))", 21)]
+        [TestCase("7 / 2", 3)]
+        [TestCase("7.0 / 2", 3.5)]
         public void TestCalculations2(string input, object expectedResult) {
             AreEqual(expectedResult, Interpreter.Evaluate(input));
         }
