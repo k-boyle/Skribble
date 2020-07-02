@@ -27,9 +27,9 @@ namespace Kode {
             ISyntaxTreeNode node;
             if (precedence == OperatorPrecendence.Length) {
                 switch (this._currentToken) {
-                    case INumberToken number:
+                    case DoubleToken number:
                         this._currentToken = this._lexer.GetNextToken();
-                        return new NumberNode(number);
+                        return new DoubleNode(number);
                     
                     case OpenParenthesesToken _:
                         this._currentToken = this._lexer.GetNextToken();

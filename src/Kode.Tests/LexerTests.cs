@@ -1,11 +1,10 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Numerics;
 using static NUnit.Framework.Assert;
 
 namespace Kode.Tests {
     public class LexerTests {
-        [TestCase("123", typeof(LongToken))]
+        [TestCase("123", typeof(DoubleToken))]
         [TestCase("1.2", typeof(DoubleToken))]
         [TestCase("+", typeof(PositiveToken))]
         [TestCase("-", typeof(NegativeToken))]
@@ -23,63 +22,63 @@ namespace Kode.Tests {
         [Test]
         public void TestTokensInAdditionSum() {
             var lexer = new Lexer("3 + 5");
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<PositiveToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
         
         [Test]
         public void TestTokensInSubtractionSum() {
             var lexer = new Lexer("3 - 5");
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<NegativeToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
         
         [Test]
         public void TestTokensInMultiplicationSum() {
             var lexer = new Lexer("3 * 5");
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<MultiplicationToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
 
         [Test]
         public void TestTokensInDivisionSum() {
             var lexer = new Lexer("3 / 5");
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<DivisionToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
 
         [Test]
         public void TestTokensInBracketedSum() {
             var lexer = new Lexer("3 + (4 + 4)");
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<PositiveToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<CloseParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
         [Test]
         public void TestTokensInNestedBracketedSum() {
             var lexer = new Lexer("3 + (4 + (4 * 2))");
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<MultiplicationToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<CloseParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<CloseParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
@@ -88,9 +87,9 @@ namespace Kode.Tests {
         [Test]
         public void TestTokensInModulusSum() {
             var lexer = new Lexer("10 % 2");
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<ModulusToken>(lexer.GetNextToken());
-            IsInstanceOf<LongToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
         
@@ -109,23 +108,6 @@ namespace Kode.Tests {
         public void TestThrowsOnInvalidToken(string input) {
             var lexer = new Lexer(input);
             Throws<InvalidTokenException>(() => {
-                while (!(lexer.GetNextToken() is EOFToken)) ;
-            });
-        }
-        
-        private static object[] OutOfRangeNumbers() {
-            return new object[] {
-                (new BigInteger(long.MaxValue) + 1).ToString(),
-                (new BigInteger(long.MinValue) - 1).ToString(),
-                (new BigInteger(double.MaxValue) + 1).ToString(),
-                double.MinValue.ToString($".{new string('#', 324)}") + "1"
-            };
-        }
-        
-        [TestCaseSource(nameof(OutOfRangeNumbers))]
-        public void TestThrowsOnOutOfRangeNumbers(string input) {
-            var lexer = new Lexer(input);
-            Throws<NumberParseFailedException>(() => {
                 while (!(lexer.GetNextToken() is EOFToken)) ;
             });
         }

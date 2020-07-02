@@ -8,38 +8,38 @@ namespace Kode.Tests {
                 new object[] {
                     "3 * 2",
                     new BinaryOperaterNode(
-                        new NumberNode(3),
+                        new DoubleNode(3),
                         MultiplicationToken.Instance,
-                        new NumberNode(2))
+                        new DoubleNode(2))
                 },
                 new object[] {
                     "2 * (1 + 1)",
                     new BinaryOperaterNode(
-                        new NumberNode(2),
+                        new DoubleNode(2),
                         MultiplicationToken.Instance,
                         new BinaryOperaterNode(
-                            new NumberNode(1),
+                            new DoubleNode(1),
                             PositiveToken.Instance,
-                            new NumberNode(1))), 
+                            new DoubleNode(1))), 
                 },
                 new object[] {
                     "(2 * (5 + 1)) / (8 % (1 * 2))",
                     new BinaryOperaterNode(
                         new BinaryOperaterNode(
-                            new NumberNode(2),
+                            new DoubleNode(2),
                             MultiplicationToken.Instance,
                             new BinaryOperaterNode(
-                                new NumberNode(5),
+                                new DoubleNode(5),
                                 PositiveToken.Instance,
-                                new NumberNode(1))),
+                                new DoubleNode(1))),
                         DivisionToken.Instance,
                         new BinaryOperaterNode(
-                            new NumberNode(8),
+                            new DoubleNode(8),
                             ModulusToken.Instance,
                             new BinaryOperaterNode(
-                                new NumberNode(1),
+                                new DoubleNode(1),
                                 MultiplicationToken.Instance,
-                                new NumberNode(2)))), 
+                                new DoubleNode(2)))), 
                 }
             };
         }

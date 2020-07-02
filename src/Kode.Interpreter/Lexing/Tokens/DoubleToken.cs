@@ -1,6 +1,6 @@
 ﻿namespace Kode {
-    internal readonly struct DoubleToken : INumberToken {
-        public dynamic Value { get; }
+    internal readonly struct DoubleToken : IToken {
+        public double Value { get; }
 
         public DoubleToken(double value) {
             Value = value;

@@ -6,7 +6,7 @@ namespace Kode {
             this._parser = parser;
         }
         
-        public static object Evaluate(string input) {
+        public static double Evaluate(string input) {
             var lexer = new Lexer(input);
             var parser = new Parser(lexer);
             var interpreter = new Interpreter(parser);
@@ -15,29 +15,29 @@ namespace Kode {
                 : throw new UnexpectedTokenException(parser.CurrentToken, lexer.Position);
         }
         
-        private object NavigateSyntaxTree() {
+        private double NavigateSyntaxTree() {
             ISyntaxTreeNode tree = this._parser.Parse();
             return Visit(tree);
         }
-        
-        private dynamic Visit(ISyntaxTreeNode node) {
+
+        private double Visit(ISyntaxTreeNode node) {
             return node switch {
-                NumberNode number => VisitNumberNode(number),
+                DoubleNode number       => VisitNumberNode(number),
                 BinaryOperaterNode op   => VisitOperatorNode(op),
                 UnaryOperatorNode unary => VisitUnaryNode(unary),
-                _                 => throw new UnexpectedNodeException(node)
+                _                       => throw new UnexpectedNodeException(node)
             };
         }
         
-        private object VisitOperatorNode(BinaryOperaterNode node) {
+        private double VisitOperatorNode(BinaryOperaterNode node) {
             return node.BinaryOperator.Calculate(Visit(node.Left), Visit(node.Right));
         }
         
-        private object VisitNumberNode(NumberNode node) {
+        private double VisitNumberNode(DoubleNode node) {
             return node.Number.Value;
         }
         
-        private object VisitUnaryNode(UnaryOperatorNode node) {
+        private double VisitUnaryNode(UnaryOperatorNode node) {
             return node.UnaryOperator.Apply(Visit(node.Node));
         }
     }

@@ -1,21 +1,17 @@
 ﻿namespace Kode {
-    internal readonly struct NumberNode : ISyntaxTreeNode {
-        public INumberToken Number { get; }
+    internal readonly struct DoubleNode : ISyntaxTreeNode {
+        public DoubleToken Number { get; }
 
-        public NumberNode(INumberToken number) {
+        public DoubleNode(DoubleToken number) {
             Number = number;
         }
         
-        public NumberNode(double d) {
+        public DoubleNode(double d) {
             Number = new DoubleToken(d);
-        }
-        
-        public NumberNode(long l) {
-            Number = new LongToken(l);
         }
 
         public override bool Equals(object obj) {
-            if (obj is NumberNode number) {
+            if (obj is DoubleNode number) {
                 return number.Number.Value.Equals(Number.Value);
             }
 

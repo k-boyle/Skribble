@@ -26,15 +26,15 @@ namespace Kode {
             this._currentChar = text.Length > 0 ? (char?) this._text.Span[0] : null;
         }
         
-        private (int Length, bool FloatingPoint) GetNumberInformation() {
+        private int GetNumberLength() {
             int digitLength = 0;
-            bool floatingPoint = false;
+            bool alreadyFloating = false;
             do {
                 Increment();
                 digitLength++;
                 
                 if (this._currentChar == '.') {
-                    floatingPoint = !floatingPoint 
+                    alreadyFloating = !alreadyFloating 
                         ? true
                         : throw new InvalidTokenException(this._currentChar.Value, this._position);
                     digitLength++;
@@ -42,7 +42,7 @@ namespace Kode {
                 }
             } while (this._currentChar.HasValue && char.IsDigit(this._currentChar.Value));
 
-            return (digitLength, floatingPoint);
+            return digitLength;
         }
 
         private void SkipSpaces() {
@@ -64,10 +64,8 @@ namespace Kode {
                 char current = this._currentChar.Value;
                 
                 if (char.IsDigit(current)) {
-                    var (length, floating) = GetNumberInformation();
-                    return floating
-                        ? new DoubleToken(ParseDouble(length))
-                        : new LongToken(ParseLong(length)) as INumberToken;
+                    var length = GetNumberLength();
+                    return new DoubleToken(ParseDouble(length));
                 }
             
                 if (TokenMap.TryGetValue(current, out var token)) {
@@ -87,14 +85,6 @@ namespace Kode {
             }
             
             throw new NumberParseFailedException(this._text.Slice(this._position - length, length).ToString(), typeof(double));
-        }
-        
-        private long ParseLong(int length) {
-            if (long.TryParse(this._text.Slice(this._position - length, length).Span, out var l)) {
-                return l;
-            }
-            
-            throw new NumberParseFailedException(this._text.Slice(this._position - length, length).ToString(), typeof(long));
         }
     }
 }
