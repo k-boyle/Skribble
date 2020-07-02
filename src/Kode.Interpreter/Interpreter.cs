@@ -28,11 +28,11 @@ namespace Kode {
             };
         }
         
-        private dynamic VisitOperatorNode(OperaterNode node) {
+        private object VisitOperatorNode(OperaterNode node) {
             return node.Operator.Calculate(Visit(node.Left), Visit(node.Right));
         }
         
-        private dynamic VisitNumberNode(NumberNode node) {
+        private object VisitNumberNode(NumberNode node) {
             return node.Number.Value;
         }
     }
