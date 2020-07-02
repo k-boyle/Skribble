@@ -28,7 +28,7 @@ namespace Kode.Tests {
         [TestCase("--3", 3)]
         [TestCase("5 - -2", 7)]
         [TestCase("5 * -2", -10)]
-        public void TestCalculations(string input, object expectedResult) {
+        public void TestCalculations(string input, double expectedResult) {
             AreEqual(expectedResult, Interpreter.Evaluate(input));
         }
         
