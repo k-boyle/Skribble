@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Kode {
     internal class Parser {
         private static readonly HashSet<Type>[] OperatorPrecendence = {
-            new HashSet<Type> { typeof(AdditionToken), typeof(MinusToken) },
+            new HashSet<Type> { typeof(PositiveToken), typeof(NegativeToken) },
             new HashSet<Type> { typeof(MultiplicationToken), typeof(DivisionToken), typeof(ModulusToken) }
         };
 
@@ -41,6 +41,10 @@ namespace Kode {
                         
                         throw new UnexpectedTokenException(typeof(CloseParenthesesToken), this._currentToken);
                     
+                    case IUnaryOperatorToken unary:
+                        this._currentToken = this._lexer.GetNextToken();
+                        return new UnaryOperatorNode(unary, Parse(0));
+
                     default:
                         throw new UnexpectedTokenException(this._currentToken, this._lexer.Position);
                 }
@@ -48,9 +52,9 @@ namespace Kode {
 
             node = Parse(precedence + 1);
             HashSet<Type> operators = OperatorPrecendence[precedence];
-            while (this._currentToken is IOperatorToken op && operators.Contains(op.GetType())) {
+            while (this._currentToken is IBinaryOperatorToken op && operators.Contains(op.GetType())) {
                 this._currentToken = this._lexer.GetNextToken();
-                node = new OperaterNode(node, op, Parse(precedence + 1));
+                node = new BinaryOperaterNode(node, op, Parse(precedence + 1));
             }
 
             return node;

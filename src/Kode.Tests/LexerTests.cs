@@ -7,8 +7,8 @@ namespace Kode.Tests {
     public class LexerTests {
         [TestCase("123", typeof(LongToken))]
         [TestCase("1.2", typeof(DoubleToken))]
-        [TestCase("+", typeof(AdditionToken))]
-        [TestCase("-", typeof(MinusToken))]
+        [TestCase("+", typeof(PositiveToken))]
+        [TestCase("-", typeof(NegativeToken))]
         [TestCase("*", typeof(MultiplicationToken))]
         [TestCase("/", typeof(DivisionToken))]
         [TestCase("", typeof(EOFToken))]
@@ -24,7 +24,7 @@ namespace Kode.Tests {
         public void TestTokensInAdditionSum() {
             var lexer = new Lexer("3 + 5");
             IsInstanceOf<LongToken>(lexer.GetNextToken());
-            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<LongToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
@@ -33,7 +33,7 @@ namespace Kode.Tests {
         public void TestTokensInSubtractionSum() {
             var lexer = new Lexer("3 - 5");
             IsInstanceOf<LongToken>(lexer.GetNextToken());
-            IsInstanceOf<MinusToken>(lexer.GetNextToken());
+            IsInstanceOf<NegativeToken>(lexer.GetNextToken());
             IsInstanceOf<LongToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
@@ -60,10 +60,10 @@ namespace Kode.Tests {
         public void TestTokensInBracketedSum() {
             var lexer = new Lexer("3 + (4 + 4)");
             IsInstanceOf<LongToken>(lexer.GetNextToken());
-            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<LongToken>(lexer.GetNextToken());
-            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<LongToken>(lexer.GetNextToken());
             IsInstanceOf<CloseParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
@@ -72,10 +72,10 @@ namespace Kode.Tests {
         public void TestTokensInNestedBracketedSum() {
             var lexer = new Lexer("3 + (4 + (4 * 2))");
             IsInstanceOf<LongToken>(lexer.GetNextToken());
-            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<LongToken>(lexer.GetNextToken());
-            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<LongToken>(lexer.GetNextToken());
             IsInstanceOf<MultiplicationToken>(lexer.GetNextToken());
@@ -98,7 +98,7 @@ namespace Kode.Tests {
         public void TestDoubleSum() {
             var lexer = new Lexer("1.2 + 3.1");
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<AdditionToken>(lexer.GetNextToken());
+            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }

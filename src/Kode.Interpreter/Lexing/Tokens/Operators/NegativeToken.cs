@@ -1,6 +1,6 @@
 namespace Kode {
-    internal readonly struct MinusToken : IOperatorToken {
-        public static readonly MinusToken Instance = new MinusToken();
+    internal readonly struct NegativeToken : IBinaryOperatorToken, IUnaryOperatorToken {
+        public static readonly NegativeToken Instance = new NegativeToken();
         
         public long Calculate(long left, long right) {
             return unchecked(left - right);
@@ -17,8 +17,17 @@ namespace Kode {
         public double Calculate(double left, long right) {
             return left - right;
         }
+        
+        public long Apply(long number) {
+            return unchecked(-number);
+        }
+
+        public double Apply(double number) {
+            return -number;
+        }
+        
         public override string ToString() {
-            return "OPERATOR MINUS";
+            return "TOKEN NEGATIVE";
         }
     }
 }

@@ -1,25 +1,25 @@
 ﻿namespace Kode {
-    internal readonly struct ModulusToken : IOperatorToken {
-        public static readonly ModulusToken Instance = new ModulusToken();
+    internal readonly struct MultiplicationToken : IBinaryOperatorToken {
+        public static readonly MultiplicationToken Instance = new MultiplicationToken();
 
         public long Calculate(long left, long right) {
-            return left % right;
+            return unchecked(left * right);
         }
 
         public double Calculate(double left, double right) {
-            return left % right;
+            return left * right;
         }
 
         public double Calculate(long left, double right) {
-            return left % right;
+            return left * right;
         }
 
         public double Calculate(double left, long right) {
-            return left % right;
+            return left * right;
         }
 
         public override string ToString() {
-            return "OPERATOR MODULUS";
+            return "OPERATOR MULTIPLICATION";
         }
     }
 }

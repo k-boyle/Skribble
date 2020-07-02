@@ -1,6 +1,6 @@
 namespace Kode {
-    internal readonly struct AdditionToken : IOperatorToken {
-        public static readonly AdditionToken Instance = new AdditionToken();
+    internal readonly struct PositiveToken : IBinaryOperatorToken, IUnaryOperatorToken {
+        public static readonly PositiveToken Instance = new PositiveToken();
 
         public long Calculate(long left, long right) {
             return unchecked(left + right);
@@ -18,8 +18,16 @@ namespace Kode {
             return left + right;
         }
 
+        public long Apply(long number) {
+            return number;
+        }
+
+        public double Apply(double number) {
+            return number;
+        }
+
         public override string ToString() {
-            return "OPERATOR ADDITION";
+            return "TOKEN POSITIVE";
         }
     }
 }

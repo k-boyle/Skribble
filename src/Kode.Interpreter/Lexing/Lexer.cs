@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Kode {
     internal sealed class Lexer {
         private static readonly Dictionary<char, IToken> TokenMap = new Dictionary<char, IToken> {
-            ['+'] = AdditionToken.Instance,
-            ['-'] = MinusToken.Instance,
+            ['+'] = PositiveToken.Instance,
+            ['-'] = NegativeToken.Instance,
             ['*'] = MultiplicationToken.Instance,
             ['/'] = DivisionToken.Instance,
             ['('] = OpenParenthesesToken.Instance,

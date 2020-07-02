@@ -1,5 +1,5 @@
 namespace Kode {
-    internal interface IOperatorToken : IToken {
+    internal interface IBinaryOperatorToken : IToken {
         long Calculate(long left, long right);
         double Calculate(double left, double right);
         double Calculate(double left, long right);

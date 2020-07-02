@@ -23,17 +23,22 @@ namespace Kode {
         private dynamic Visit(ISyntaxTreeNode node) {
             return node switch {
                 NumberNode number => VisitNumberNode(number),
-                OperaterNode op   => VisitOperatorNode(op),
+                BinaryOperaterNode op   => VisitOperatorNode(op),
+                UnaryOperatorNode unary => VisitUnaryNode(unary),
                 _                 => throw new UnexpectedNodeException(node)
             };
         }
         
-        private object VisitOperatorNode(OperaterNode node) {
-            return node.Operator.Calculate(Visit(node.Left), Visit(node.Right));
+        private object VisitOperatorNode(BinaryOperaterNode node) {
+            return node.BinaryOperator.Calculate(Visit(node.Left), Visit(node.Right));
         }
         
         private object VisitNumberNode(NumberNode node) {
             return node.Number.Value;
+        }
+        
+        private object VisitUnaryNode(UnaryOperatorNode node) {
+            return node.UnaryOperator.Apply(Visit(node.Node));
         }
     }
 }

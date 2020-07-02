@@ -25,10 +25,13 @@ namespace Kode.Tests {
         [TestCase("10 + (3 + (4 * 2))", 21)]
         [TestCase("7 / 2", 3)]
         [TestCase("7.0 / 2", 3.5)]
+        [TestCase("-3", -3)]
+        [TestCase("--3", 3)]
+        [TestCase("5 - -2", 7)]
+        [TestCase("5 * -2", -10)]
         public void TestCalculations(string input, object expectedResult) {
             AreEqual(expectedResult, Interpreter.Evaluate(input));
         }
-        
         
         [TestCase("1 + 2 + 2)")]
         [TestCase("1 + 2 + 2))")]

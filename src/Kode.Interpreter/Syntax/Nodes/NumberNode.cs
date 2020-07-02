@@ -21,5 +21,9 @@
 
             return false;
         }
+
+        public override string ToString() {
+            return $"NUMER NODE {Number}";
+        }
     }
 }
