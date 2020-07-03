@@ -40,6 +40,40 @@ namespace Kode.Tests {
                                 new DoubleNode(1),
                                 MultiplicationToken.Instance,
                                 new DoubleNode(2)))), 
+                },
+                new object[] {
+                    "2 ** 3",
+                    new BinaryOperaterNode(
+                        new DoubleNode(2),
+                        PowerToken.Instance,
+                        new DoubleNode(3))
+                },
+                new object[] {
+                    "2 pow 3",
+                    new BinaryOperaterNode(
+                        new DoubleNode(2),
+                        PowerToken.Instance,
+                        new DoubleNode(3))
+                },
+                new object[] {
+                    "3 + 2 ** 2",
+                    new BinaryOperaterNode(
+                        new DoubleNode(3),
+                        PositiveToken.Instance, 
+                        new BinaryOperaterNode(
+                            new DoubleNode(2),
+                            PowerToken.Instance,
+                            new DoubleNode(2)))
+                },
+                new object[] {
+                    "2 + 3 << 2",
+                    new BinaryOperaterNode(
+                        new BinaryOperaterNode(
+                            new DoubleNode(2),
+                            PositiveToken.Instance,
+                            new DoubleNode(3)),
+                        LeftBitshiftToken.Instance,
+                        new DoubleNode(2))
                 }
             };
         }
@@ -52,9 +86,10 @@ namespace Kode.Tests {
             AreEqual(expectedTree, parsed);
         }
         
-        [Test]
-        public void TestIncompleteSumThrows() {
-            Throws<UnexpectedTokenException>(() => new Parser(new Lexer("3 +")).Parse());
+        [TestCase("3 +")]
+        [TestCase("3 *** 2")]
+        public void TestIncompleteSumThrows(string input) {
+            Throws<UnexpectedTokenException>(() => new Parser(new Lexer(input)).Parse());
         }
         
         [TestCase("1 + ((2 + 2)")]

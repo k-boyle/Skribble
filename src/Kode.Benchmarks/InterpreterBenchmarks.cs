@@ -12,7 +12,9 @@ namespace Kode.Benchmarks {
             "10 + (3 + (4 * 2))",
             "9223372036854775807 + 1",
             "--2",
-            "5 * -2")]
+            "5 * -2",
+            "2 ** 2",
+            "2 pow 2")]
         public string Calculation { get; set; }
 
         [Benchmark]

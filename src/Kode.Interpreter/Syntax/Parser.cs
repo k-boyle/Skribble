@@ -4,8 +4,10 @@ using System.Collections.Generic;
 namespace Kode {
     internal class Parser {
         private static readonly HashSet<Type>[] OperatorPrecendence = {
+            new HashSet<Type> { typeof(LeftBitshiftToken), typeof(RightBitshiftToken) }, 
             new HashSet<Type> { typeof(PositiveToken), typeof(NegativeToken) },
-            new HashSet<Type> { typeof(MultiplicationToken), typeof(DivisionToken), typeof(ModulusToken) }
+            new HashSet<Type> { typeof(MultiplicationToken), typeof(DivisionToken), typeof(ModulusToken) },
+            new HashSet<Type> { typeof(PowerToken) }
         };
 
         public IToken CurrentToken => this._currentToken;

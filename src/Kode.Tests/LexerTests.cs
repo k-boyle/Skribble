@@ -14,6 +14,10 @@ namespace Kode.Tests {
         [TestCase("(", typeof(OpenParenthesesToken))]
         [TestCase(")", typeof(CloseParenthesesToken))]
         [TestCase("%", typeof(ModulusToken))]
+        [TestCase("**", typeof(PowerToken))]
+        [TestCase("<<", typeof(LeftBitshiftToken))]
+        [TestCase(">>", typeof(RightBitshiftToken))]
+        [TestCase("pow", typeof(PowerToken))]
         public void TestTokens(string input, Type expectedTokenType) {
             var lexer = new Lexer(input);
             IsInstanceOf(expectedTokenType, lexer.GetNextToken());
@@ -102,9 +106,19 @@ namespace Kode.Tests {
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
         
+        [Test]
+        public void TestMultiLengthOperator() {
+            var lexer = new Lexer("2 ** 3");
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
+            IsInstanceOf<PowerToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
+            IsInstanceOf<EOFToken>(lexer.GetNextToken());
+        }
+
         [TestCase("#")]
         [TestCase("1..2")]
         [TestCase("1.2.3")]
+        [TestCase("p")]
         public void TestThrowsOnInvalidToken(string input) {
             var lexer = new Lexer(input);
             Throws<InvalidTokenException>(() => {
