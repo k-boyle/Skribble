@@ -6,21 +6,7 @@ namespace Kode.Tests {
     public class LexerTests {
         [TestCase("123", typeof(DoubleToken))]
         [TestCase("1.2", typeof(DoubleToken))]
-        [TestCase("+", typeof(PositiveToken))]
-        [TestCase("-", typeof(NegativeToken))]
-        [TestCase("*", typeof(MultiplicationToken))]
-        [TestCase("/", typeof(DivisionToken))]
         [TestCase("", typeof(EOFToken))]
-        [TestCase("(", typeof(OpenParenthesesToken))]
-        [TestCase(")", typeof(CloseParenthesesToken))]
-        [TestCase("%", typeof(ModulusToken))]
-        [TestCase("**", typeof(PowerToken))]
-        [TestCase("<<", typeof(LeftBitshiftToken))]
-        [TestCase(">>", typeof(RightBitshiftToken))]
-        [TestCase("pow", typeof(PowerToken))]
-        [TestCase("sin", typeof(SineToken))]
-        [TestCase("cos", typeof(CosineToken))]
-        [TestCase("tan", typeof(TangentToken))]
         public void TestTokens(string input, Type expectedTokenType) {
             var lexer = new Lexer(input);
             IsInstanceOf(expectedTokenType, lexer.GetNextToken());
