@@ -1,5 +1,5 @@
 ﻿namespace Kode {
-    public interface IUnaryOperatorToken {
+    internal interface IUnaryOperatorToken : IToken {
         double Apply(double number);
     }
 }

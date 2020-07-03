@@ -74,6 +74,15 @@ namespace Kode.Tests {
                             new DoubleNode(3)),
                         LeftBitshiftToken.Instance,
                         new DoubleNode(2))
+                },
+                new object[] {
+                    "2 + sin 10",
+                    new BinaryOperaterNode(
+                        new DoubleNode(2),
+                        PositiveToken.Instance,
+                        new UnaryOperatorNode(
+                            SineToken.Instance,
+                            new DoubleNode(10)))
                 }
             };
         }

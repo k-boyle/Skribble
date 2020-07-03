@@ -18,6 +18,9 @@ namespace Kode.Tests {
         [TestCase("<<", typeof(LeftBitshiftToken))]
         [TestCase(">>", typeof(RightBitshiftToken))]
         [TestCase("pow", typeof(PowerToken))]
+        [TestCase("sin", typeof(SineToken))]
+        [TestCase("cos", typeof(CosineToken))]
+        [TestCase("tan", typeof(TangentToken))]
         public void TestTokens(string input, Type expectedTokenType) {
             var lexer = new Lexer(input);
             IsInstanceOf(expectedTokenType, lexer.GetNextToken());

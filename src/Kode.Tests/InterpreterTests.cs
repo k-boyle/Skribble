@@ -32,6 +32,8 @@ namespace Kode.Tests {
         [TestCase("2 pow 3", 8)]
         [TestCase("8 + 2 ** 3", 16)]
         [TestCase("2 + 3 << 2", 20)]
+        [TestCase("sin 90", 1)]
+        [TestCase("2 * sin 90", 2)]
         public void TestCalculations(string input, double expectedResult) {
             AreEqual(expectedResult, Interpreter.Evaluate(input));
         }

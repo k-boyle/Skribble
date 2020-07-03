@@ -12,11 +12,15 @@ namespace Kode {
             ['%'] = ModulusToken.Instance
         };
 
+        //todo this is horrifc
         private static readonly Dictionary<char, TokenNode> ConflictingCharacterTokenMap = new Dictionary<char, TokenNode> {
             ['*'] = new TokenNode(new TokenNode('*', PowerToken.Instance), MultiplicationToken.Instance),
             ['p'] = new TokenNode(new TokenNode('o', new TokenNode('w', PowerToken.Instance)), null),
             ['<'] = new TokenNode(new TokenNode('<',  LeftBitshiftToken.Instance), null),
-            ['>'] = new TokenNode(new TokenNode('>',  RightBitshiftToken.Instance), null)
+            ['>'] = new TokenNode(new TokenNode('>',  RightBitshiftToken.Instance), null),
+            ['s'] = new TokenNode(new TokenNode('i', new TokenNode('n', SineToken.Instance)), null),
+            ['c'] = new TokenNode(new TokenNode('o', new TokenNode('s', CosineToken.Instance)), null),
+            ['t'] = new TokenNode(new TokenNode('a', new TokenNode('n', TangentToken.Instance)), null)
         };
 
         public static int Find(ReadOnlyMemory<char> input, out IToken token) {

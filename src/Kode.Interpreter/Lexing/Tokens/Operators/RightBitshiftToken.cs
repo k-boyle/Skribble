@@ -1,5 +1,5 @@
 ﻿namespace Kode {
-    public readonly struct RightBitshiftToken : IBinaryOperatorToken {
+    internal readonly struct RightBitshiftToken : IBinaryOperatorToken {
         public static readonly RightBitshiftToken Instance = new RightBitshiftToken();
 
         public double Calculate(double left, double right) {
