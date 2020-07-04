@@ -186,7 +186,7 @@ namespace Skribble {
                 stringLength++;
             } while (this._currentChar.HasValue 
                   && (char.IsLetter(this._currentChar.Value)
-                  ||  char.IsDigit(this._currentChar.Value)));
+                  || char.IsDigit(this._currentChar.Value)));
 
             return stringLength;
         }

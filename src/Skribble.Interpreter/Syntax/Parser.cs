@@ -17,7 +17,9 @@ namespace Skribble {
                 typeof(DivisionToken),
                 typeof(ModulusToken)
             },
-            new HashSet<Type> { typeof(PowerToken) }
+            new HashSet<Type> {
+                typeof(PowerToken)
+            }
         };
 
         public IToken CurrentToken => this._currentToken;
@@ -41,10 +43,6 @@ namespace Skribble {
                 this._currentToken = this._lexer.GetNextToken();
                 yield return Statement();
             }
-
-            if (this._currentToken is VarCharToken vchar) {
-                throw new UnexpectedTokenException(typeof(EOLToken), vchar);
-            }
         }
 
         private ISyntaxTreeNode Statement() {
@@ -64,7 +62,6 @@ namespace Skribble {
             throw new UnexpectedTokenException(typeof(AssignmentToken), this._currentToken);
         }
 
-
         private ISyntaxTreeNode Expression(int precedence = 0) {
             ISyntaxTreeNode node;
             if (precedence == OperatorPrecendence.Length) {
@@ -75,7 +72,7 @@ namespace Skribble {
 
                     case OpenParenthesesToken _:
                         this._currentToken = this._lexer.GetNextToken();
-                        node = Expression(0);
+                        node = Expression();
                         if (this._currentToken is CloseParenthesesToken) {
                             this._currentToken = this._lexer.GetNextToken();
                             return node;
@@ -85,7 +82,7 @@ namespace Skribble {
 
                     case IUnaryOperatorToken unary:
                         this._currentToken = this._lexer.GetNextToken();
-                        return new UnaryOperatorNode(unary, Expression(0));
+                        return new UnaryOperatorNode(unary, Expression());
 
                     case VarCharToken vchar:
                         this._currentToken = this._lexer.GetNextToken();
