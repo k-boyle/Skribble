@@ -9,8 +9,8 @@ namespace Skribble {
                 typeof(RightBitshiftToken)
             },
             new HashSet<Type> {
-                typeof(PositiveToken),
-                typeof(NegativeToken)
+                typeof(PlusToken),
+                typeof(MinusToken)
             },
             new HashSet<Type> {
                 typeof(MultiplicationToken),

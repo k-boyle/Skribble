@@ -9,8 +9,8 @@ namespace Skribble.Tests {
         [TestCase("", typeof(EOFToken))]
         [TestCase("abc", typeof(VarCharToken))]
         [TestCase("abc1", typeof(VarCharToken))]
-        [TestCase("+", typeof(PositiveToken))]
-        [TestCase("-", typeof(NegativeToken))]
+        [TestCase("+", typeof(PlusToken))]
+        [TestCase("-", typeof(MinusToken))]
         [TestCase("*", typeof(MultiplicationToken))]
         [TestCase("/", typeof(DivisionToken))]
         [TestCase("(", typeof(OpenParenthesesToken))]
@@ -35,7 +35,7 @@ namespace Skribble.Tests {
         public void TestTokensInAdditionSum() {
             var lexer = new Lexer("3 + 5");
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<PlusToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
@@ -44,7 +44,7 @@ namespace Skribble.Tests {
         public void TestTokensInSubtractionSum() {
             var lexer = new Lexer("3 - 5");
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<NegativeToken>(lexer.GetNextToken());
+            IsInstanceOf<MinusToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
@@ -71,10 +71,10 @@ namespace Skribble.Tests {
         public void TestTokensInBracketedSum() {
             var lexer = new Lexer("3 + (4 + 4)");
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<PlusToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<PlusToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<CloseParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
@@ -83,10 +83,10 @@ namespace Skribble.Tests {
         public void TestTokensInNestedBracketedSum() {
             var lexer = new Lexer("3 + (4 + (4 * 2))");
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<PlusToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<PlusToken>(lexer.GetNextToken());
             IsInstanceOf<OpenParenthesesToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<MultiplicationToken>(lexer.GetNextToken());
@@ -109,7 +109,7 @@ namespace Skribble.Tests {
         public void TestDoubleSum() {
             var lexer = new Lexer("1.2 + 3.1");
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
-            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<PlusToken>(lexer.GetNextToken());
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
@@ -146,7 +146,7 @@ namespace Skribble.Tests {
             IsInstanceOf<VarCharToken>(lexer.GetNextToken());
             IsInstanceOf<AssignmentToken>(lexer.GetNextToken());
             IsInstanceOf<VarCharToken>(lexer.GetNextToken());
-            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<PlusToken>(lexer.GetNextToken());
             IsInstanceOf<VarCharToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }

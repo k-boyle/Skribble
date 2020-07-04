@@ -6,14 +6,14 @@ using System.Collections.Generic;
 *
 *     numbers = 2 to 10
 *     squares = numbers mapped square
-*     ret squares sum
-* 
+*     ret squares sum* 
 */
 
 /*
  *    myList = []
  *    for 1 to 10
  *    myList@i = i ** i
+ *    end
  *
  *    ret myList 
  */

@@ -21,7 +21,7 @@ namespace Skribble.Tests {
                             MultiplicationToken.Instance,
                             new BinaryOperaterNode(
                                 new DoubleNode(1),
-                                PositiveToken.Instance,
+                                PlusToken.Instance,
                                 new DoubleNode(1)))) 
                 },
                 new object[] {
@@ -33,7 +33,7 @@ namespace Skribble.Tests {
                                 MultiplicationToken.Instance,
                                 new BinaryOperaterNode(
                                     new DoubleNode(5),
-                                    PositiveToken.Instance,
+                                    PlusToken.Instance,
                                     new DoubleNode(1))),
                             DivisionToken.Instance,
                             new BinaryOperaterNode(
@@ -65,7 +65,7 @@ namespace Skribble.Tests {
                     new RootNode(
                         new BinaryOperaterNode(
                             new DoubleNode(3),
-                            PositiveToken.Instance, 
+                            PlusToken.Instance, 
                             new BinaryOperaterNode(
                                 new DoubleNode(2),
                                 PowerToken.Instance,
@@ -77,7 +77,7 @@ namespace Skribble.Tests {
                         new BinaryOperaterNode(
                             new BinaryOperaterNode(
                                 new DoubleNode(2),
-                                PositiveToken.Instance,
+                                PlusToken.Instance,
                                 new DoubleNode(3)),
                             LeftBitshiftToken.Instance,
                             new DoubleNode(2)))
@@ -87,7 +87,7 @@ namespace Skribble.Tests {
                     new RootNode(
                         new BinaryOperaterNode(
                             new DoubleNode(2),
-                            PositiveToken.Instance,
+                            PlusToken.Instance,
                             new UnaryOperatorNode(
                                 SineToken.Instance,
                                 new DoubleNode(10))))
@@ -113,7 +113,7 @@ namespace Skribble.Tests {
                             new BinaryOperaterNode(
                                 new VariableNode(
                                     new VarCharToken("a")),
-                                PositiveToken.Instance, 
+                                PlusToken.Instance, 
                                 new VariableNode(
                                     new VarCharToken("b"))))) 
                 },
@@ -128,7 +128,7 @@ namespace Skribble.Tests {
                             new DoubleNode(20)),
                         new BinaryOperaterNode(
                             new DoubleNode(8), 
-                            PositiveToken.Instance, 
+                            PlusToken.Instance, 
                             new DoubleNode(2))) 
                 }
             };

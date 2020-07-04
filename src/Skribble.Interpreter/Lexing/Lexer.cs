@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Skribble {
     internal sealed class Lexer {
         private static readonly Dictionary<char, IToken> UniqueSingleCharacterTokenMap = new Dictionary<char, IToken> {
-            ['+'] = PositiveToken.Instance,
-            ['-'] = NegativeToken.Instance,
+            ['+'] = PlusToken.Instance,
+            ['-'] = MinusToken.Instance,
             ['/'] = DivisionToken.Instance,
             ['('] = OpenParenthesesToken.Instance,
             [')'] = CloseParenthesesToken.Instance,
