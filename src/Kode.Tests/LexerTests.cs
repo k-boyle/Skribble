@@ -7,6 +7,25 @@ namespace Kode.Tests {
         [TestCase("123", typeof(DoubleToken))]
         [TestCase("1.2", typeof(DoubleToken))]
         [TestCase("", typeof(EOFToken))]
+        [TestCase("abc", typeof(VarCharToken))]
+        [TestCase("abc1", typeof(VarCharToken))]
+        [TestCase("+", typeof(PositiveToken))]
+        [TestCase("-", typeof(NegativeToken))]
+        [TestCase("*", typeof(MultiplicationToken))]
+        [TestCase("/", typeof(DivisionToken))]
+        [TestCase("(", typeof(OpenParenthesesToken))]
+        [TestCase(")", typeof(CloseParenthesesToken))]
+        [TestCase("%", typeof(ModulusToken))]
+        [TestCase("**", typeof(PowerToken))]
+        [TestCase("<<", typeof(LeftBitshiftToken))]
+        [TestCase(">>", typeof(RightBitshiftToken))]
+        [TestCase("pow", typeof(PowerToken))]
+        [TestCase("sin", typeof(SineToken))]
+        [TestCase("cos", typeof(CosineToken))]
+        [TestCase("tan", typeof(TangentToken))]
+        [TestCase("=", typeof(AssignmentToken))]
+        [TestCase("\n", typeof(EOLToken))]
+        [TestCase("\r\n", typeof(EOLToken))]
         public void TestTokens(string input, Type expectedTokenType) {
             var lexer = new Lexer(input);
             IsInstanceOf(expectedTokenType, lexer.GetNextToken());
@@ -103,14 +122,55 @@ namespace Kode.Tests {
             IsInstanceOf<DoubleToken>(lexer.GetNextToken());
             IsInstanceOf<EOFToken>(lexer.GetNextToken());
         }
-
-        [TestCase("#")]
-        [TestCase("1..2")]
-        [TestCase("1.2.3")]
-        [TestCase("p")]
-        public void TestThrowsOnInvalidToken(string input) {
+        
+        [Test]
+        public void TestVariableAssignment() {
+            var lexer = new Lexer("a = 10");
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<AssignmentToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
+            IsInstanceOf<EOFToken>(lexer.GetNextToken());
+        }
+       
+        [Test]
+        public void TestMultipleVariablesAndAssignments() {
+            var lexer = new Lexer("a = 10\nb = 20\nc = a + b");
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<AssignmentToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
+            IsInstanceOf<EOLToken>(lexer.GetNextToken());
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<AssignmentToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
+            IsInstanceOf<EOLToken>(lexer.GetNextToken());
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<AssignmentToken>(lexer.GetNextToken());
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<PositiveToken>(lexer.GetNextToken());
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<EOFToken>(lexer.GetNextToken());
+        }
+        
+        [Test]
+        public void TestMultipleNewLines() {
+            var lexer = new Lexer("a = 10\n\r\nb = 20");
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<AssignmentToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
+            IsInstanceOf<EOLToken>(lexer.GetNextToken());
+            IsInstanceOf<EOLToken>(lexer.GetNextToken());
+            IsInstanceOf<VarCharToken>(lexer.GetNextToken());
+            IsInstanceOf<AssignmentToken>(lexer.GetNextToken());
+            IsInstanceOf<DoubleToken>(lexer.GetNextToken());
+            IsInstanceOf<EOFToken>(lexer.GetNextToken());
+        }
+        
+        [TestCase("#", typeof(InvalidTokenException))]
+        [TestCase("1..2", typeof(InvalidTokenException))]
+        [TestCase("1.2.3", typeof(NumberParseFailedException))]
+        public void TestThrowsOnInvalidToken(string input, Type expectedExceptionType) {
             var lexer = new Lexer(input);
-            Throws<InvalidTokenException>(() => {
+            Throws(expectedExceptionType, () => {
                 while (!(lexer.GetNextToken() is EOFToken)) ;
             });
         }

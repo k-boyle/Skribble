@@ -38,6 +38,12 @@ namespace Kode.Tests {
             AreEqual(expectedResult, Interpreter.Evaluate(input));
         }
         
+        [TestCase("a = 10")]
+        [TestCase("a = 10\nb = 20\nc = a + b")]
+        public void TestScriptsWithoutReturn(string input) {
+            AreEqual(null, Interpreter.Evaluate(input));
+        }
+        
         [TestCase("1 + 2 + 2)")]
         [TestCase("1 + 2 + 2))")]
         public void TestThrowsOnInvalidBracket(string input) {

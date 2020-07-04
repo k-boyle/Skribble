@@ -1,5 +1,9 @@
-﻿namespace Kode {
+﻿using System;
+
+namespace Kode {
     internal readonly struct DoubleNode : ISyntaxTreeNode {
+        private const double EPSILON = 0.0000001;
+        
         public DoubleToken Number { get; }
 
         public DoubleNode(DoubleToken number) {
@@ -11,11 +15,7 @@
         }
 
         public override bool Equals(object obj) {
-            if (obj is DoubleNode number) {
-                return number.Number.Value.Equals(Number.Value);
-            }
-
-            return false;
+            return obj is DoubleNode num && Math.Abs(num.Number.Value - Number.Value) < EPSILON;
         }
 
         public override string ToString() {
