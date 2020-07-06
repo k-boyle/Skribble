@@ -34,14 +34,14 @@ namespace Skribble {
                 return EOFToken.Instance;
             }
 
-            char current = this._currentChar.Value;
+            var current = this._currentChar.Value;
             int length;
             if (char.IsDigit(current)) {
                 length = GetNumberLength();
                 return new DoubleToken(ParseDouble(length));
             }
 
-            if (UniqueSingleCharacterTokenMap.TryGetValue(current, out IToken nextToken)) {
+            if (UniqueSingleCharacterTokenMap.TryGetValue(current, out var nextToken)) {
                 Increment();
                 return nextToken;
             }
@@ -71,7 +71,7 @@ namespace Skribble {
         }
         
         private int GetNumberLength() {
-            int digitLength = 0;
+            var digitLength = 0;
             do {
                 Increment();
                 digitLength++;
@@ -87,7 +87,7 @@ namespace Skribble {
 
         private bool TryGetVariableLengthToken(char current, out IToken nextToken) {
             nextToken = null;
-            ReadOnlySpan<char> asSpan = this._text.Slice(this._position).Span;
+            var asSpan = this._text.Slice(this._position).Span;
             switch (current) {
                 case '\r':
                     if (asSpan.Length == 1 || asSpan[1] != '\n') {
@@ -201,7 +201,7 @@ namespace Skribble {
         }
 
         private int GetStringLength() {
-            int stringLength = 0;
+            var stringLength = 0;
             do {
                 Increment();
                 stringLength++;

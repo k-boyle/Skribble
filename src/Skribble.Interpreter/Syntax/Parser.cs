@@ -71,7 +71,7 @@ namespace Skribble {
                 throw new UnexpectedTokenException(typeof(VarCharToken), this._currentToken);
             }
 
-            List<VarCharToken> parameters = new List<VarCharToken>();
+            var parameters = new List<VarCharToken>();
             while ((this._currentToken = this._lexer.GetNextToken()) is VarCharToken param) {
                 parameters.Add(param);
             }
@@ -128,7 +128,7 @@ namespace Skribble {
             }
 
             node = Expression(precedence + 1);
-            HashSet<Type> operators = OperatorPrecendence[precedence];
+            var operators = OperatorPrecendence[precedence];
             while (this._currentToken is IBinaryOperatorToken op && operators.Contains(op.GetType())) {
                 this._currentToken = this._lexer.GetNextToken();
                 node = new BinaryOperaterNode(node, op, Expression(precedence + 1));

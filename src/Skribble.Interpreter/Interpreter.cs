@@ -51,7 +51,7 @@ namespace Skribble {
         }
         
         private double? NavigateSyntaxTree() {
-            RootNode tree = this._parser.Parse();
+            var tree = this._parser.Parse();
             double? last = null;
             foreach (var node in tree.ChildNodes) {
                 last = Visit(node);
