@@ -3,6 +3,8 @@ using static NUnit.Framework.Assert;
 
 namespace Skribble.Tests {
     public class InterpreterTests {
+        //todo i should be feeding syntax trees into the interpreter
+        //these tests currently test the entire system, not the interpreter
         [TestCase("9", 9)]
         [TestCase("3+4", 7)]
         [TestCase("10-7", 3)]
@@ -48,6 +50,11 @@ namespace Skribble.Tests {
         [TestCase("1 + 2 + 2))")]
         public void TestThrowsOnInvalidBracket(string input) {
             Throws<UnexpectedTokenException>(() => Interpreter.Evaluate(input));
+        }
+        
+        [Test]
+        public void TestThrowsOnUnknownVariable() {
+            Throws<UnknownVariableException>(() => Interpreter.Evaluate("a = b + 10"));
         }
     }
 }

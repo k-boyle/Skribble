@@ -26,6 +26,8 @@ namespace Skribble.Tests {
         [TestCase("=", typeof(AssignmentToken))]
         [TestCase("\n", typeof(EOLToken))]
         [TestCase("\r\n", typeof(EOLToken))]
+        [TestCase("fn", typeof(FunctionToken))]
+        [TestCase("ret", typeof(ReturnToken))]
         public void TestTokens(string input, Type expectedTokenType) {
             var lexer = new Lexer(input);
             IsInstanceOf(expectedTokenType, lexer.GetNextToken());

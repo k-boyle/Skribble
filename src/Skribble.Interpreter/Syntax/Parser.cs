@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Skribble {
     internal class Parser {
@@ -48,11 +49,13 @@ namespace Skribble {
         private ISyntaxTreeNode Statement() {
             return this._currentToken switch {
                 VarCharToken vchar => Assignment(vchar),
+                FunctionToken _    => Function(),
+                ReturnToken _      => NopNode.Instance,
                 _                  => Expression()
             };
         }
         
-        private ISyntaxTreeNode Assignment(VarCharToken vchar) {
+        private AssignmentNode Assignment(VarCharToken vchar) {
             this._currentToken = this._lexer.GetNextToken();
             if (this._currentToken is AssignmentToken) {
                 this._currentToken = this._lexer.GetNextToken();
@@ -62,8 +65,39 @@ namespace Skribble {
             throw new UnexpectedTokenException(typeof(AssignmentToken), this._currentToken);
         }
 
+        private FunctionNode Function() {
+            this._currentToken = this._lexer.GetNextToken();
+            if (!(this._currentToken is VarCharToken name)) {
+                throw new UnexpectedTokenException(typeof(VarCharToken), this._currentToken);
+            }
+
+            List<VarCharToken> parameters = new List<VarCharToken>();
+            while ((this._currentToken = this._lexer.GetNextToken()) is VarCharToken param) {
+                parameters.Add(param);
+            }
+
+            if (!(this._currentToken is EOLToken)) {
+                throw new UnexpectedTokenException(typeof(EOLToken), this._currentToken);
+            }
+
+            this._currentToken = this._lexer.GetNextToken();
+            IEnumerable<ISyntaxTreeNode> function = Statements().ToArray(); //todo get rid of this
+            if (!(this._currentToken is ReturnToken)) {
+                throw new UnexpectedTokenException(typeof(ReturnToken), this._currentToken);
+            }
+
+            this._currentToken = this._lexer.GetNextToken();
+            return new FunctionNode(name, parameters, function);
+        }
+        
         private ISyntaxTreeNode Expression(int precedence = 0) {
             ISyntaxTreeNode node;
+            
+            if (this._currentToken is ReturnToken) {
+                this._currentToken = this._lexer.GetNextToken();
+                return NopNode.Instance;
+            }
+            
             if (precedence == OperatorPrecendence.Length) {
                 switch (this._currentToken) {
                     case DoubleToken number:
@@ -87,7 +121,7 @@ namespace Skribble {
                     case VarCharToken vchar:
                         this._currentToken = this._lexer.GetNextToken();
                         return new VariableNode(vchar);
-                    
+
                     default:
                         throw new UnexpectedTokenException(this._currentToken, this._lexer.Position);
                 }

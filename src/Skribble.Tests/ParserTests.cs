@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using static NUnit.Framework.Assert;
 
 namespace Skribble.Tests {
@@ -130,6 +131,90 @@ namespace Skribble.Tests {
                             new DoubleNode(8), 
                             PlusToken.Instance, 
                             new DoubleNode(2))) 
+                },
+                new object[] {
+                    "fn test a\nret",
+                    new RootNode(
+                        new FunctionNode(
+                            new VarCharToken("test"),
+                            new List<VarCharToken> {
+                                new VarCharToken("a")
+                            },
+                            new ISyntaxTreeNode[] { })) 
+                },
+                new object[] {
+                    "fn test a\nret\n10 + 2",
+                    new RootNode(
+                        new FunctionNode(
+                            new VarCharToken("test"),
+                            new List<VarCharToken> {
+                                new VarCharToken("a")
+                            },
+                            new ISyntaxTreeNode[] { }),
+                        new BinaryOperaterNode(
+                            new DoubleNode(10),
+                            PlusToken.Instance,
+                            new DoubleNode(2))) 
+                },
+                new object[] {
+                    "fn test a\nb = a + 10\nret\n10 + 2",
+                    new RootNode(
+                        new FunctionNode(
+                            new VarCharToken("test"),
+                            new List<VarCharToken> {
+                                new VarCharToken("a")
+                            },
+                            new ISyntaxTreeNode[] {
+                                new AssignmentNode(
+                                    new VarCharToken("b"),
+                                    new BinaryOperaterNode(
+                                        new VariableNode(
+                                            new VarCharToken("a")),
+                                        PlusToken.Instance,
+                                        new DoubleNode(10)))
+                            }),
+                        new BinaryOperaterNode(
+                            new DoubleNode(10),
+                            PlusToken.Instance,
+                            new DoubleNode(2))) 
+                },
+                new object[] {
+                    "fn test\nret",
+                    new RootNode(
+                        new FunctionNode(
+                            new VarCharToken("test"),
+                            new List<VarCharToken>(),
+                            new ISyntaxTreeNode[] { }))
+                },
+                new object[] {
+                    "fn test\nfn test2 a b c\nd = a + b + c\nret\nret",
+                    new RootNode(
+                        new FunctionNode(
+                            new VarCharToken("test"),
+                            new List<VarCharToken>(),
+                            new ISyntaxTreeNode[] {
+                                new FunctionNode(
+                                    new VarCharToken("test2"),
+                                    new List<VarCharToken> {
+                                        new VarCharToken("a"),
+                                        new VarCharToken("b"),
+                                        new VarCharToken("c")
+                                    }, 
+                                    new ISyntaxTreeNode[] {
+                                        new AssignmentNode(
+                                            new VarCharToken("d"),
+                                            new BinaryOperaterNode(
+                                                new BinaryOperaterNode(
+                                                    new VariableNode(
+                                                        new VarCharToken("a")),
+                                                    PlusToken.Instance, 
+                                                    new VariableNode(
+                                                        new VarCharToken("b"))),
+                                                PlusToken.Instance, 
+                                                new VariableNode(
+                                                    new VarCharToken("c"))))
+                                    }), 
+                            }))
                 }
             };
         }

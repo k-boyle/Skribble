@@ -174,6 +174,27 @@ namespace Skribble {
                     Increment();
                     nextToken = TangentToken.Instance;
                     return true;
+                
+                case 'f':
+                    if (asSpan.Length < 2 || asSpan[1] != 'n') {
+                        break;
+                    }
+                    
+                    Increment();
+                    Increment();
+                    nextToken = FunctionToken.Instance;
+                    return true;
+                
+                case 'r':
+                    if (asSpan.Length < 3 || asSpan[1] != 'e' || asSpan[2] != 't') {
+                        break;
+                    }
+                    
+                    Increment();
+                    Increment();
+                    Increment();
+                    nextToken = ReturnToken.Instance;
+                    return true;
             }
 
             return false;
