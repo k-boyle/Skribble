@@ -33,7 +33,7 @@ namespace Skribble {
         private readonly Dictionary<VarCharToken, double> _globalScopedVariables;
         private readonly Dictionary<VarCharToken, FunctionNode> _methods;
 
-        private Interpreter(Parser parser) {
+        internal Interpreter(Parser parser) {
             this._parser = parser;
             this._globalScopedVariables = new Dictionary<VarCharToken, double>();
             this._methods = new Dictionary<VarCharToken, FunctionNode>();
@@ -50,7 +50,7 @@ namespace Skribble {
                 : throw new UnexpectedTokenException(parser.CurrentToken, lexer.Position);
         }
         
-        private double? NavigateSyntaxTree() {
+        internal double? NavigateSyntaxTree() {
             var tree = this._parser.Parse();
             double? last = null;
             foreach (var node in tree.ChildNodes) {

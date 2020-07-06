@@ -34,7 +34,10 @@ namespace Skribble {
             this._currentToken = this._lexer.GetNextToken();
         }
 
-        public RootNode Parse() {
+        internal Parser() {
+        }
+
+        public virtual RootNode Parse() {
             return new RootNode(Statements());
         }
         
