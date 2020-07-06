@@ -14,10 +14,6 @@ namespace Skribble {
             Number = new DoubleToken(d);
         }
 
-        public Type GetNodeType() {
-            return typeof(double);
-        }
-
         public override bool Equals(object obj) {
             return obj is DoubleNode num && Math.Abs(num.Number.Value - Number.Value) < EPSILON;
         }
